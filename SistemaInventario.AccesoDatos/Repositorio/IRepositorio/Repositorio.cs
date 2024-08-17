@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SistemaInventario.Modelos.Especificaciones;
 using SistemaInventarioV6.AccesoDatos.Data;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,31 @@ namespace SistemaInventario.AccesoDatos.Repositorio.IRepositorio
                 query= query.AsNoTracking();
             }
             return await query.ToListAsync();
+        }
+
+        public PagedList<T> ObtenerTodosPaginado(Parametros parametros, Expression<Func<T, bool>> filtro = null, Func<IEquatable<T>, IOrderedQueryable<T>> orderBy = null, string incluirPropiedades = null, bool isTracking = true)
+        {
+            IQueryable<T> query = dbSet;
+            if (filtro != null)
+            {
+                query = query.Where(filtro);
+            }
+            if (incluirPropiedades != null)
+            {
+                foreach (var incluirProp in incluirPropiedades.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(incluirProp); // Ejemplo agrega las propiedades que estan relacionadas como "Categoria y Marca" a la entidad Producto
+                }
+            }
+            if (orderBy != null)
+            {
+                query = orderBy((IEquatable<T>)query);
+            }
+            if (!isTracking)
+            {
+                query = query.AsNoTracking();
+            }
+            return PagedList<T>.ToPagedList(query, parametros.PageNumber, parametros.PageSize);
         }
 
         public void Remover(T entidad)
