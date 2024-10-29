@@ -51,29 +51,31 @@ namespace SistemaInventario.AccesoDatos.Repositorio.IRepositorio
             return await query.FirstOrDefaultAsync();
         }
 
-        public  async Task<IEnumerable<T>> ObtenerTodos(Expression<Func<T, bool>> filtro = null, Func<IEquatable<T>, IOrderedQueryable<T>> orderBy = null, string incluirPropiedades = null, bool isTracking = true)
+        public async Task<IEnumerable<T>> ObtenerTodos(Expression<Func<T, bool>> filtro = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string incluirPropiedades = null, bool isTracking = true)
         {
             IQueryable<T> query = dbSet;
             if (filtro != null)
             {
-                query = query.Where(filtro);
+                query = query.Where(filtro);   //  select /* from where ....
             }
             if (incluirPropiedades != null)
             {
-                foreach (var incluirProp in incluirPropiedades.Split( new char[]{',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var incluirProp in incluirPropiedades.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query=query.Include(incluirProp); // Ejemplo agrega las propiedades que estan relacionadas como "Categoria y Marca" a la entidad Producto
+                    query = query.Include(incluirProp);    //  ejemplo "Categoria,Marca"
                 }
             }
             if (orderBy != null)
             {
-                query = orderBy((IEquatable<T>)query);
+                query = orderBy(query);
             }
             if (!isTracking)
             {
-                query= query.AsNoTracking();
+                query = query.AsNoTracking();
             }
             return await query.ToListAsync();
+
         }
 
         public PagedList<T> ObtenerTodosPaginado(Parametros parametros, Expression<Func<T, bool>> filtro = null, Func<IEquatable<T>, IOrderedQueryable<T>> orderBy = null, string incluirPropiedades = null, bool isTracking = true)

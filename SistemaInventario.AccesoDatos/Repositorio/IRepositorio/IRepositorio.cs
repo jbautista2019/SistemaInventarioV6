@@ -11,12 +11,18 @@ namespace SistemaInventario.AccesoDatos.Repositorio.IRepositorio
     public interface IRepositorio<T> where T : class
     {
         Task<T> Obtener(int  id);
+        //Task<IEnumerable<T>> ObtenerTodos(
+        //    Expression<Func<T, bool>> filtro = null,
+        //    Func<IEquatable<T>, IOrderedQueryable<T>> orderBy = null,
+        //    string incluirPropiedades = null,
+        //    bool isTracking = true
+        //    );
         Task<IEnumerable<T>> ObtenerTodos(
-            Expression<Func<T, bool>> filtro = null,
-            Func<IEquatable<T>, IOrderedQueryable<T>> orderBy = null,
-            string incluirPropiedades = null,
-            bool isTracking = true
-            );
+          Expression<Func<T, bool>> filtro = null,
+          Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+          string incluirPropiedades = null,
+          bool isTracking = true
+          );
         PagedList<T> ObtenerTodosPaginado(Parametros parametros, Expression<Func<T, bool>> filtro = null,
             Func<IEquatable<T>, IOrderedQueryable<T>> orderBy = null,
             string incluirPropiedades = null,
