@@ -19,5 +19,31 @@ namespace SistemaInventario.AccesoDatos.Repositorio.IRepositorio
         {
            _db.Update(orden);
         }
+
+        public void ActualizarEstado(int id, string ordenEstado, string pagoEstado)
+        {
+            var ordenBD= _db.Ordenes.FirstOrDefault(o => o.Id == id);
+            if (ordenBD != null) {
+                ordenBD.EstadoOrden=ordenEstado;
+                ordenBD.EstadoPago= pagoEstado;
+            }
+        }
+
+        public void ActualizarPagoStripeId(int id, string sessionId, string transaccionId)
+        {
+            var ordenBD = _db.Ordenes.FirstOrDefault(o => o.Id == id);
+            if (ordenBD != null)
+            {
+                if (!string.IsNullOrEmpty(sessionId))
+                {
+                    ordenBD.SessionId=sessionId;
+                }
+                if (!string.IsNullOrEmpty(transaccionId))
+                {
+                    ordenBD.TransacionId = transaccionId;
+                    ordenBD.FechaPago= DateTime.Now;
+                }
+            }
+        }
     }
 }

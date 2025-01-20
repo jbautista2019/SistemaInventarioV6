@@ -113,10 +113,10 @@ namespace SistemaInventario.AccesoDatos.Repositorio.IRepositorio
             dbSet.RemoveRange(entidad);
         }
 
-        public void RemoverRango(IEquatable<T> entidad)
-        {
-            throw new NotImplementedException();
-        }
+        //public void RemoverRango(IEquatable<T> entidad)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         //Task<IEnumerable<T>> IRepositorio<T>.ObtenerPrimero(Expression<Func<T, bool>> filtro, string incluirPropiedades, bool isTracking)
         //{

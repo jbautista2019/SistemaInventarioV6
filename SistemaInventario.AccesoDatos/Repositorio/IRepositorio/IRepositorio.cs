@@ -34,6 +34,6 @@ namespace SistemaInventario.AccesoDatos.Repositorio.IRepositorio
          );
         Task Agregar(T entidad);
         void Remover(T entidad);
-        void RemoverRango(IEquatable<T> entidad);
+        void RemoverRango(IEnumerable<T> entidad);
     }
 }
